@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/github/henriquelopeslima/covercraft/graph/badge.svg?token=8FGUHPVS6K)](https://codecov.io/github/henriquelopeslima/covercraft)
 
 # CoverCraft
 

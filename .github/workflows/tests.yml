@@ -1,0 +1,37 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  phpunit-with-coverage:
+    name: Run PHPUnit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start the application
+        run: docker compose up -d --build
+
+      - name: Install dependencies
+        run: docker compose exec --user root php composer install
+
+      - name: Fix permissions for coverage
+        run: docker compose exec --user root php chmod -R 777 /var/www
+
+      - name: Give permissions for var
+        run: sudo chmod -R 777 var/
+
+      - name: Create the phpunit.xml
+        run: docker compose exec --user root php cp phpunit.xml.dist phpunit.xml
+
+      - name: Start the PHPUnit
+        run: docker compose exec -T php bash -c "php -d memory_limit=512M bin/phpunit tests/ --path-coverage src/ --coverage-clover=coverage.xml"
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
