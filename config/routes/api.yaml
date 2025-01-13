@@ -1,0 +1,4 @@
+get:
+  path: /hello-world
+  controller: App\Controller\HelloWorldController
+  methods: ['GET']
